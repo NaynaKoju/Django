@@ -1,113 +1,3 @@
-<!-- 
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Hangman Game</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e1e2f, #2d2d44);
-            color: #fff;
-            text-align: center;
-            padding: 70px;
-        }
-
-        h1 {
-            margin-top: 30px;
-            font-size: 2.5rem;
-            color: #ffcc00;
-            text-shadow: 2px 2px 8px rgba(255, 204, 0, 0.7);
-            animation: glow 1.5s infinite alternate;
-        }
-
-        h2 {
-            font-size: 2rem;
-            letter-spacing: 10px;
-            margin: 20px 0;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin: 10px 0;
-        }
-
-        p[style] {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ff4d4d !important;
-        }
-
-        form {
-            margin: 20px 0;
-        }
-
-        input[type="text"] {
-            padding: 8px;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            width: 170px;
-            text-align: center;
-            margin-right: 10px;
-        }
-
-        button {
-            background: #bcda18;
-            color: #1e1e2f;
-            font-weight: bold;
-            font-size: 1.1rem;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #174b08;
-            transform: scale(1.05);
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            background: #4cafef;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: 0.3s;
-            font-weight: bold;
-        }
-
-        a:hover {
-            background: #3793d6;
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body>
-    <h1>🎮 READY TO WIN / HANG?</h1>
-
-    <h2>{{ display_word }}</h2>
-    <p>Attempts left: {{ attempts }}</p>
-    <p>Guessed letters: {{ guessed|join:", " }}</p>
-    <p>{{ message }}</p>
-
-    {% if attempts > 0 and "_" in display_word %}
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="guess" maxlength="1" placeholder="Guess your word" required>>
-            <button type="submit">Guess</button>
-        </form>
-    {% else %}
-        <a href="{% url 'start_game' %}">Play Again</a>
-    {% endif %}
-</body>
-</html>
-
- -->
-
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -221,10 +111,92 @@
             height: 100%;
             object-fit: cover;
         }
+
+        .clue-box {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #00ffcc;
+            font-weight: bold;
+        }
+
+        .action-buttons form, .action-buttons button {
+            display: inline-flex;
+            margin: 5px;
+        }
+
+        .action-buttons button {
+        background-color: #3498db;  /* blue by default */
+        color: white;
+        }
+
+        .action-buttons button:hover {
+        background-color: #e74c3c;  /* turns red when hovered */
+        }
+
+
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 10000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #2d2d44;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .modal button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal .confirm {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .modal .confirm:hover {
+            background: #cc0000;
+        }
+
+        .modal .cancel {
+            background: #4cafef;
+            color: white;
+        }
+
+        .modal .cancel:hover {
+            background: #3793d6;
+        }
     </style>
 </head>
 <body id="gameBody">
     <h1>🎮 READY TO WIN / HANG?</h1>
+    <div class="clue-box">
+        <h3>Clue: {{ clue }}</h3>
+    </div>
 
     <h2>{{ display_word }}</h2>
     <p>Attempts left: {{ attempts }}</p>
@@ -232,16 +204,37 @@
     <p>{{ message }}</p>
 
     {% if attempts > 0 and "_" in display_word %}
-        <!-- Input Box -->
-        <form method="POST">
+        <!-- Guess input -->
+        <form method="POST" style="margin-bottom: 10px;">
             {% csrf_token %}
             <input type="text" name="guess" maxlength="1" placeholder="Guess your word" required>
             <button type="submit">Guess</button>
         </form>
+
+        <!-- Quit & Reset Wins buttons always visible during the game -->
+        <div class="action-buttons">
+            <button type="button" onclick="openModal()">I Quit</button>
+            <form method="post" action="{% url 'reset_wins' %}">
+                {% csrf_token %}
+                <button type="submit">Reset Wins</button>
+            </form>
+        </div>
+
     {% else %}
         <a href="{% url 'start_game' %}">Play Again</a>
-        <a href="{% url 'home' %}"> I Quit</a>
     {% endif %}
+
+    <!-- Quit Confirmation Modal -->
+    <div id="quitModal" class="modal">
+        <div class="modal-content">
+            <h3>Are you sure you want to quit?</h3>
+            <form method="post" action="{% url 'quit_game' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="confirm">Yes, Quit</button>
+            </form>
+            <button class="cancel" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
 
     <!-- Confetti overlay for win -->
     {% if message and "Congratulations" in message %}
@@ -255,20 +248,15 @@
             justify-content: center;
             align-items: center;
             pointer-events: none;
-            z-index: 9999;
-        ">
+            z-index: 9999;">
             <img src="{% static 'images/confetti.gif' %}" alt="Confetti">
         </div>
-
         <script>
-    // Remove confetti after 6 seconds
-    setTimeout(() => {
-        const confetti = document.getElementById('confetti-overlay');
-        if (confetti) {
-            confetti.remove();
-        }
-    }, 6000); // Adjust time according to GIF duration
-</script>
+            setTimeout(() => {
+                const confetti = document.getElementById('confetti-overlay');
+                if (confetti) confetti.remove();
+            }, 3000);
+        </script>
     {% endif %}
 
     <!-- Shake effect for loss -->
@@ -277,5 +265,20 @@
             document.getElementById("gameBody").classList.add("shake");
         </script>
     {% endif %}
+
+    <script>
+        function openModal() {
+            document.getElementById("quitModal").style.display = "block";
+        }
+        function closeModal() {
+            document.getElementById("quitModal").style.display = "none";
+        }
+        window.onclick = function(event) {
+            let modal = document.getElementById("quitModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
