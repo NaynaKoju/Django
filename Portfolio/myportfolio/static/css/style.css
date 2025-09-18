@@ -1,0 +1,190 @@
+/* .projects-section .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projects-section .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.projects-section .btn-primary {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.projects-section .btn-primary:hover {
+  background-color: #e6c221;
+  transform: translateY(-2px);
+} */
+/* =========================
+   General Styles
+========================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0d6efd; /* Bootstrap primary */
+}
+
+/* =========================
+   Navbar
+========================= */
+.navbar {
+    padding: 1rem 2rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    margin-left: 1rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Hero Section
+========================= */
+header#hero {
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 1rem;
+    min-height: 50vh;
+}
+
+header#hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+header#hero p {
+    font-size: 1.25rem;
+}
+
+/* =========================
+   About Section
+========================= */
+#about {
+    background-color: #fff;
+}
+
+#about h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+#about p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* =========================
+   Skills Section
+========================= */
+#skills .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#skills .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+#skills h2 {
+    margin-bottom: 2rem;
+}
+
+/* =========================
+   Projects Section (your existing styles)
+========================= */
+.projects-section .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projects-section .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.projects-section .btn-primary {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.projects-section .btn-primary:hover {
+    background-color: #e6c221;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Contact Section
+========================= */
+#contact {
+    background-color: #f8f9fa;
+}
+
+#contact h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+#contact p {
+    font-size: 1.1rem;
+}
+
+/* =========================
+   Footer
+========================= */
+footer {
+    background-color: #212529;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #0d6efd;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   Responsive Adjustments
+========================= */
+@media (max-width: 768px) {
+    header#hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    header#hero p {
+        font-size: 1rem;
+    }
+    
+    .nav-link {
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+}
